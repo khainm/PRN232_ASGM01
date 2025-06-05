@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/NguyenMinhKhai_PRN232_A01_BE.sln.props" />
+</Project>

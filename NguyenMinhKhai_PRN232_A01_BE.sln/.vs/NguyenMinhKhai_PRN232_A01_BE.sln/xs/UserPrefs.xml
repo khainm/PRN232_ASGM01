@@ -1,0 +1,63 @@
+﻿<Properties StartupConfiguration="{BF21F298-A323-41FD-BB21-A5567A421BBE}|https">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
+    <Files>
+      <File FileName="Program.cs" Line="98" Column="28" />
+      <File FileName="Models/Account.cs" />
+      <File FileName="NguyenMinhKhai_PRN232_A01_BE.sln.http" />
+      <File FileName="Data/ApplicationDbContext.cs" />
+      <File FileName="Controllers/NewsController.cs" Line="248" Column="32" />
+      <File FileName="Controllers/AccountsController.cs" Line="119" Column="44" />
+      <File FileName="Controllers/AuthController.cs" Line="85" Column="79" />
+      <File FileName="Controllers/CategoriesController.cs" />
+      <File FileName="Models/Category.cs" />
+      <File FileName="Models/News.cs" Line="1" Column="1" />
+      <File FileName="Models/Tag.cs" />
+      <File FileName="DTOs/AccountDTO.cs" Line="15" Column="18" />
+      <File FileName="Properties/launchSettings.json" />
+      <File FileName="DTOs/AuthDTO.cs" />
+      <File FileName="Mappings/AutoMapperProfile.cs" Line="19" Column="44" />
+      <File FileName="Repositories/CategoryRepository.cs" />
+      <File FileName="DTOs/NewsDTO.cs" />
+      <File FileName="DTOs/UpdateNewsDTO.cs" />
+      <File FileName="Services/AccountService.cs" Line="306" Column="33" />
+      <File FileName="Services/NewsService.cs" Line="10" Column="32" />
+      <File FileName="Repositories/INewsRepository.cs" Line="3" Column="1" />
+      <File FileName="Repositories/ICategoryRepository.cs" Line="1" Column="1" />
+      <File FileName="Repositories/IAccountRepository.cs" Line="1" Column="1" />
+      <File FileName="Repositories/NewsRepository.cs" Line="275" Column="38" />
+      <File FileName="Services/CategoryService.cs" Line="27" Column="20" />
+      <File FileName="Services/IAccountService.cs" Line="16" Column="27" />
+      <File FileName="DTOs/UpdateProfileDTO.cs" Line="5" Column="18" />
+      <File FileName="Controllers/ReportsController.cs" Line="7" Column="30" />
+      <File FileName="Services/ReportService.cs" Line="21" Column="46" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="NguyenMinhKhai_PRN232_A01_BE.sln" expanded="True">
+            <Node name="NguyenMinhKhai_PRN232_A01_BE.sln">
+              <Node name="Controllers" expanded="True" />
+              <Node name="DTOs" expanded="True" />
+              <Node name="Mappings" expanded="True" />
+              <Node name="Models" expanded="True" />
+              <Node name="Repositories" expanded="True" />
+              <Node name="Services" expanded="True" />
+              <Node name="appsettings.json" expanded="True" />
+              <Node name="Program.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.NguyenMinhKhai__PRN232__A01__BE.sln PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
