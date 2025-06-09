@@ -166,7 +166,7 @@ builder.Services.AddAuthorization(options =>
         policy.RequireAssertion(context =>
             context.User.HasClaim(ClaimTypes.Role, "1") ||
             context.User.HasClaim(ClaimTypes.Role, "Staff")));
-    options.AddPolicy("RequireLecturerRole", policy =>
+    options.AddPolicy("RequireUserRole", policy =>
         policy.RequireAssertion(context =>
             context.User.HasClaim(ClaimTypes.Role, "2") ||
             context.User.HasClaim(ClaimTypes.Role, "User")));

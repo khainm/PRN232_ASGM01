@@ -78,7 +78,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "RequireAdminRole")]
+        [Authorize(Policy = "RequireStaffRole")]
         public async Task<ActionResult<CategoryDTO>> Create([FromBody] CreateCategoryDTO categoryDto)
         {
             if (!ModelState.IsValid)
@@ -100,7 +100,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Policy = "RequireAdminRole")]
+        [Authorize(Policy = "RequireStaffRole")]
         public async Task<ActionResult<CategoryDTO>> Update(int id, [FromBody] UpdateCategoryDTO categoryDto)
         {
             if (!ModelState.IsValid)
@@ -125,7 +125,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = "RequireAdminRole")]
+        [Authorize(Policy = "RequireStaffRole")]
         public async Task<ActionResult> Delete(int id)
         {
             var hasNews = await _categoryRepository.HasNewsArticlesAsync(id);

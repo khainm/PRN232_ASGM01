@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Nav, Navbar, Tab, Tabs } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AccountList from '../components/accounts/AccountList';
 import NewsList from '../components/news/NewsList';
-import CategoryList from '../components/categories/CategoryList';
-import reportService from '../services/reportService';
-import type { NewsStatisticsDTO } from '../types/News';
-import type { Statistics } from '../services/reportService';
+
 import AdminReports from './AdminReports';
+import authService from '../services/authService';
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate();
-
     const [activeTab, setActiveTab] = useState('accounts');
+    const [userName, setUserName] = useState('');
+
+    useEffect(() => {
+        const user = authService.getCurrentUser();
+        if (user?.name) {
+            setUserName(user.name);
+        }
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -36,6 +41,9 @@ const AdminDashboard: React.FC = () => {
                             
                         </Nav>
                         <Nav>
+                            <Navbar.Text className="text-light me-3">
+                                Welcome, {userName} (Admin)
+                            </Navbar.Text>
                             <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
@@ -51,9 +59,6 @@ const AdminDashboard: React.FC = () => {
                 >
                     <Tab eventKey="accounts" title="Accounts">
                         {activeTab === 'accounts' && <AccountList />}
-                    </Tab>
-                    <Tab eventKey="categories" title="Categories">
-                        {activeTab === 'categories' && <CategoryList />}
                     </Tab>
                     <Tab eventKey="news" title="News">
                         {activeTab === 'news' && <NewsList isStaff={false} />}

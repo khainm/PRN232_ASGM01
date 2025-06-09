@@ -322,3 +322,4 @@
 /Users/minhkhai/Desktop/PRN232/NguyenMinhKhai_PRN232_A01_BE.sln/bin/Debug/net8.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 /Users/minhkhai/Desktop/PRN232/NguyenMinhKhai_PRN232_A01_BE.sln/bin/Debug/net8.0/Newtonsoft.Json.dll
 /Users/minhkhai/Desktop/PRN232/NguyenMinhKhai_PRN232_A01_BE.sln/bin/Debug/net8.0/Newtonsoft.Json.Bson.dll
+/Users/minhkhai/Desktop/PRN232/NguyenMinhKhai_PRN232_A01_BE.sln/obj/Debug/net8.0/NguyenMinhKhai_PRN232_A01_BE.sln.sourcelink.json
