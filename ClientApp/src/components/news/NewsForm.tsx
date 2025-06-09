@@ -155,9 +155,8 @@ const NewsForm: React.FC<NewsFormProps> = ({ isNew }) => {
                         <Form.Group className="mb-3">
                             <Form.Label>Status</Form.Label>
                             <Form.Select {...register('status')}>
-                                <option value="Draft">Draft</option>
-                                <option value="Published">Published</option>
-                                <option value="Archived">Archived</option>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
                             </Form.Select>
                         </Form.Group>
                     )}

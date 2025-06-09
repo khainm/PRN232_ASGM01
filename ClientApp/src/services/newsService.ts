@@ -1,4 +1,4 @@
-import axios from 'axios';
+
 import api from './api'; // Import the configured api instance
 
 export interface NewsDTO {
@@ -10,7 +10,7 @@ export interface NewsDTO {
     categoryName: string;
     authorId: number;
     authorName: string;
-    status: 'Draft' | 'Published' | 'Archived';
+    status: number; // 1 = Active, 0 = Inactive
     tags: string[];
     createdAt: string;
     updatedAt: string;
@@ -67,7 +67,7 @@ class NewsService {
         return response.data;
     }
 
-    async getActive() {
+    async getActive(): Promise<NewsDTO[]> {
         const response = await api.get('/news/active');
         return response.data;
     }

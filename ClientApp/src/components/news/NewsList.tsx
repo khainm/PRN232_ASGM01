@@ -19,7 +19,7 @@ const schema = yup.object().shape({
     content: yup.string().required('Content is required').min(10, 'Content must be at least 10 characters'),
     categoryId: yup.number().required('Category is required').positive('Category must be a valid number').integer('Category must be an integer'),
     TagIds: yup.array().of(yup.number().integer('Tag ID must be an integer').positive('Tag ID must be a positive number').required('Tag ID is required')).min(1, 'At least one Tag ID is required').required('Tag IDs are required'),
-    status: yup.number().required('Status is required').oneOf([0, 1, 2], 'Invalid status value'),
+    status: yup.number().required('Status is required').oneOf([0, 1], 'Status must be either Active (1) or Inactive (0)'),
 });
 
 interface BackendExpectedDTO {
@@ -42,10 +42,9 @@ const NewsList: React.FC<NewsListProps> = ({ isStaff = false }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isNew, setIsNew] = useState(true);
 
-    const statusMap: { [key: string]: number } = {
-        Draft: 0,
-        Published: 1,
-        Archived: 2,
+    const statusMap: { [key: number]: string } = {
+        0: 'Inactive',
+        1: 'Active'
     };
 
     type FormData = yup.InferType<typeof schema>;
@@ -56,7 +55,7 @@ const NewsList: React.FC<NewsListProps> = ({ isStaff = false }) => {
             content: '',
             categoryId: 1,
             TagIds: [],
-            status: 0,
+            status: 1, // Default to Active
         } as FormData
     });
 
@@ -101,7 +100,7 @@ const NewsList: React.FC<NewsListProps> = ({ isStaff = false }) => {
         methods.setValue('content', news.content);
         methods.setValue('categoryId', news.categoryId);
         methods.setValue('TagIds', []);
-        methods.setValue('status', statusMap[news.status] !== undefined ? statusMap[news.status] : 0);
+        methods.setValue('status', news.status === 'Active' ? 1 : 0);
         setShowModal(true);
     };
 
@@ -153,17 +152,10 @@ const NewsList: React.FC<NewsListProps> = ({ isStaff = false }) => {
         }
     };
 
-    const statusDisplayMap: { [key: number]: string } = {
-        0: 'Draft',
-        1: 'Published',
-        2: 'Archived',
-    };
-
     const getStatusBadge = (status: string) => {
         const variants = {
-            Draft: 'warning',
-            Published: 'success',
-            Archived: 'secondary'
+            'Active': 'success',
+            'Inactive': 'danger'
         };
         return <Badge bg={variants[status as keyof typeof variants]}>{status}</Badge>;
     };

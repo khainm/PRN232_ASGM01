@@ -73,9 +73,8 @@ const NewsHistory: React.FC = () => {
 
     const handleStatusChange = (value: string | undefined) => {
         let statusCode: number | undefined = undefined;
-        if (value === 'Draft') statusCode = 0;
-        else if (value === 'Published') statusCode = 1;
-        else if (value === 'Archived') statusCode = 2;
+        if (value === 'Active') statusCode = 1;
+        else if (value === 'Inactive') statusCode = 0;
 
         setParams(prev => ({ 
             ...prev, 
@@ -168,9 +167,8 @@ const NewsHistory: React.FC = () => {
                             onChange={handleStatusChange}
                         >
                             <Select.Option value="All">All</Select.Option>
-                            <Select.Option value="Draft">Draft</Select.Option>
-                            <Select.Option value="Published">Published</Select.Option>
-                            <Select.Option value="Archived">Archived</Select.Option>
+                            <Select.Option value="Active">Active</Select.Option>
+                            <Select.Option value="Inactive">Inactive</Select.Option>
                         </Select>
                         <RangePicker onChange={handleDateRangeChange} />
                     </Space>

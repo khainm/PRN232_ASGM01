@@ -18,16 +18,17 @@ const Home: React.FC = () => {
         const fetchData = async () => {
             try {
                 const [newsData, categoriesData] = await Promise.all([
-                    newsService.getAll(),
+                    newsService.getActive(),
                     newsService.getCategories()
                 ]);
-                setNews(newsData.filter((item: NewsDTO) => item.status === 1));
+                console.log('Raw news data:', newsData); // Debug log
+                setNews(newsData);
                 setCategories(categoriesData);
                 
                 // Get user role if authenticated
                 if (authService.isAuthenticated()) {
                     const user = authService.getCurrentUser();
-                    setUserRole(user?.role ?? null);
+                    setUserRole(user?.role ? Number(user.role) : null);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
