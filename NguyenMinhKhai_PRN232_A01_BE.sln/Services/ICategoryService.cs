@@ -7,7 +7,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Services
     {
         IQueryable<Category> GetAll();
         IQueryable<Category> SearchCategories(string searchTerm);
-        Task<Category> GetByIdAsync(int id);
+        Task<Category?> GetByIdAsync(int id);
         Task<Category> CreateAsync(Category category);
         Task<Category> UpdateAsync(Category category);
         Task<bool> DeleteAsync(int id);

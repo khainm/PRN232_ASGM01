@@ -113,7 +113,8 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+            builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured")))
     };
 
     options.Events = new JwtBearerEvents
@@ -123,19 +124,22 @@ builder.Services.AddAuthentication(options =>
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
             logger.LogInformation("Token validated successfully");
             
-            var claims = context.Principal.Claims;
-            logger.LogInformation("Claims in token: {Claims}", string.Join(", ", claims.Select(c => $"{c.Type}: {c.Value}")));
-            
-            var roleClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
-            logger.LogInformation("Role claim found: {RoleClaim}", roleClaim?.Value ?? "null");
-            
-            if (roleClaim != null)
+            if (context.Principal?.Claims != null)
             {
-                var identity = context.Principal.Identity as ClaimsIdentity;
-                if (identity != null)
+                var claims = context.Principal.Claims;
+                logger.LogInformation("Claims in token: {Claims}", string.Join(", ", claims.Select(c => $"{c.Type}: {c.Value}")));
+                
+                var roleClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+                logger.LogInformation("Role claim found: {RoleClaim}", roleClaim?.Value ?? "null");
+                
+                if (roleClaim != null)
                 {
-                    identity.AddClaim(new Claim(ClaimTypes.Role, roleClaim.Value));
-                    logger.LogInformation("Added role claim to identity: {Role}", roleClaim.Value);
+                    var identity = context.Principal.Identity as ClaimsIdentity;
+                    if (identity != null)
+                    {
+                        identity.AddClaim(new Claim(ClaimTypes.Role, roleClaim.Value));
+                        logger.LogInformation("Added role claim to identity: {Role}", roleClaim.Value);
+                    }
                 }
             }
             return Task.CompletedTask;
@@ -229,13 +233,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-static IEdmModel GetEdmModel()
-{
-    var builder = new ODataConventionModelBuilder();
-    builder.EntitySet<News>("News");
-    builder.EntitySet<Category>("Categories");
-    builder.EntitySet<Account>("Accounts");
-    return builder.GetEdmModel();
-}
 

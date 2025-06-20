@@ -263,10 +263,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Services
         {
             using var sha256 = SHA256.Create();
             var salt = new byte[16];
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                rng.GetBytes(salt);
-            }
+            RandomNumberGenerator.Fill(salt);
             var passwordBytes = Encoding.UTF8.GetBytes(password);
             var saltedPassword = new byte[salt.Length + passwordBytes.Length];
             Buffer.BlockCopy(salt, 0, saltedPassword, 0, salt.Length);
@@ -303,10 +300,10 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Services
             }
         }
 
-        public async Task<bool> VerifyPasswordAsync(string password, Account account)
+        public Task<bool> VerifyPasswordAsync(string password, Account account)
         {
             _logger.LogInformation($"Verifying password for account with ID: {account.AccountId}");
-            return password == account.Password;
+            return Task.FromResult(password == account.Password);
         }
     }
 } 

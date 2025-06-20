@@ -22,7 +22,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Services
             return _categoryRepository.SearchCategories(searchTerm);
         }
 
-        public async Task<Category> GetByIdAsync(int id)
+        public async Task<Category?> GetByIdAsync(int id)
         {
             return await _categoryRepository.GetByIdAsync(id);
         }

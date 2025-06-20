@@ -13,6 +13,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Repositories
         IQueryable<News> GetNewsByDateRange(DateTime startDate, DateTime endDate);
         IQueryable<News> GetNewsStatistics(DateTime startDate, DateTime endDate);
         Task<News?> GetByIdAsync(int id);
+        Task<News?> GetActiveByIdAsync(int id);
         Task<News> CreateAsync(CreateNewsDTO newsDto, int accountId);
         Task<News?> UpdateAsync(int id, UpdateNewsDTO newsDto);
         Task<bool> DeleteAsync(int id);

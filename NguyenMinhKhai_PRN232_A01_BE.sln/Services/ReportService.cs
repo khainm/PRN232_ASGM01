@@ -54,7 +54,8 @@ namespace FUNewsManagementSystem.Services
                 query = query.Where(n => n.CreatedDate <= endDate.Value);
 
             var newsByCategory = await query
-                .GroupBy(n => n.Category.Name)
+                .Where(n => n.Category != null)
+                .GroupBy(n => n.Category!.Name)
                 .Select(g => new
                 {
                     CategoryName = g.Key,
@@ -79,7 +80,8 @@ namespace FUNewsManagementSystem.Services
                 query = query.Where(n => n.CreatedDate <= endDate.Value);
 
             var newsByStaff = await query
-                .GroupBy(n => new { n.Account.AccountId, n.Account.FullName })
+                .Where(n => n.Account != null)
+                .GroupBy(n => new { n.Account!.AccountId, n.Account.FullName })
                 .Select(g => new
                 {
                     StaffId = g.Key.AccountId,

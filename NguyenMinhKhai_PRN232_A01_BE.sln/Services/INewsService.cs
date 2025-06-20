@@ -10,6 +10,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Services
         IQueryable<NewsDTO> SearchNews(string searchTerm);
         IQueryable<NewsDTO> GetNewsByDateRange(DateTime startDate, DateTime endDate);
         Task<NewsDTO?> GetByIdAsync(int id);
+        Task<NewsDTO?> GetActiveByIdAsync(int id);
         Task<NewsDTO> CreateAsync(CreateNewsDTO newsDto, int accountId);
         Task<NewsDTO?> UpdateAsync(int id, UpdateNewsDTO newsDto);
         Task<bool> DeleteAsync(int id);

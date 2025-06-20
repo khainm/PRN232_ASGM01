@@ -62,6 +62,13 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Services
             return news != null ? _mapper.Map<NewsDTO>(news) : null;
         }
 
+        public async Task<NewsDTO?> GetActiveByIdAsync(int id)
+        {
+            _logger.LogInformation($"Getting active news with ID: {id}");
+            var news = await _newsRepository.GetActiveByIdAsync(id);
+            return news != null ? _mapper.Map<NewsDTO>(news) : null;
+        }
+
         public async Task<NewsDTO> CreateAsync(CreateNewsDTO newsDto, int accountId)
         {
             _logger.LogInformation($"Creating news for account ID: {accountId}");

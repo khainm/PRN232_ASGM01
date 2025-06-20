@@ -39,9 +39,9 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Repositories
                 .Include(n => n.Category)
                 .Include(n => n.Account)
                 .Include(n => n.Tags)
-                .Where(n => n.Title.Contains(searchTerm) ||
+                .Where(n => n.Status == 1 && (n.Title.Contains(searchTerm) ||
                            n.Content.Contains(searchTerm) ||
-                           (n.Category != null && n.Category.Name.Contains(searchTerm)))
+                           (n.Category != null && n.Category.Name.Contains(searchTerm))))
                 .OrderByDescending(n => n.CreatedDate);
         }
 
@@ -52,6 +52,15 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Repositories
                 .Include(n => n.Account)
                 .Include(n => n.Tags)
                 .FirstOrDefaultAsync(n => n.NewsId == id);
+        }
+
+        public async Task<News?> GetActiveByIdAsync(int id)
+        {
+            return await _context.NewsArticles
+                .Include(n => n.Category)
+                .Include(n => n.Account)
+                .Include(n => n.Tags)
+                .FirstOrDefaultAsync(n => n.NewsId == id && n.Status == 1);
         }
 
         public async Task<News> CreateAsync(CreateNewsDTO newsDto, int accountId)
@@ -243,7 +252,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Repositories
         public async Task<bool> IncrementViewCountAsync(int id)
         {
             var news = await _context.NewsArticles.FindAsync(id);
-            if (news == null)
+            if (news == null || news.Status != 1) // Only increment for active news
                 return false;
 
             news.ViewCount++;

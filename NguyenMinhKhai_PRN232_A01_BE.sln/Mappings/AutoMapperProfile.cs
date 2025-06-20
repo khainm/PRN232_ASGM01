@@ -28,8 +28,8 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Mappings
 
             // News mappings
             CreateMap<News, NewsDTO>()
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
-                .ForMember(dest => dest.AccountName, opt => opt.MapFrom(src => src.Account.FullName))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : string.Empty))
+                .ForMember(dest => dest.AccountName, opt => opt.MapFrom(src => src.Account != null ? src.Account.FullName : string.Empty))
                 .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.Select(t => t.Name)));
             CreateMap<CreateNewsDTO, News>();
             CreateMap<UpdateNewsDTO, News>();

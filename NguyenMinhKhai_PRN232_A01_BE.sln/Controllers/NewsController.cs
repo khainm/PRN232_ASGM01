@@ -65,7 +65,20 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Controllers
         [ResponseCache(Duration = 300)]
         public async Task<ActionResult<NewsDTO>> GetById(int id)
         {
-            _logger.LogInformation($"Getting news with ID: {id}");
+            _logger.LogInformation($"Getting active news with ID: {id}");
+            var news = await _newsService.GetActiveByIdAsync(id);
+            if (news == null)
+            {
+                return NotFound();
+            }
+            return Ok(news);
+        }
+
+        [HttpGet("admin/{id}")]
+        [Authorize(Policy = "RequireAdminOrStaffRole")]
+        public async Task<ActionResult<NewsDTO>> GetByIdForAdmin(int id)
+        {
+            _logger.LogInformation($"Getting news with ID: {id} for admin/staff");
             var news = await _newsService.GetByIdAsync(id);
             if (news == null)
             {
@@ -150,6 +163,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Controllers
         }
 
         [HttpPost("{id}/increment-view")]
+        [AllowAnonymous]
         public async Task<IActionResult> IncrementViewCount(int id)
         {
             _logger.LogInformation($"Incrementing view count for news ID: {id}");
