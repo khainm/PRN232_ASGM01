@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>Testing API Endpoints</h1>
+    <div id="results"></div>
+    
+    <script>
+        async function testAPI() {
+            const results = document.getElementById('results');
+            
+            try {
+                // Test debug endpoint
+                console.log('Testing debug endpoint...');
+                const debugResponse = await fetch('https://localhost:7200/api/news/debug');
+                const debugData = await debugResponse.json();
+                console.log('Debug data:', debugData);
+                results.innerHTML += '<h3>Debug Info:</h3><pre>' + JSON.stringify(debugData, null, 2) + '</pre>';
+                
+                // Test active news endpoint
+                console.log('Testing active news endpoint...');
+                const activeResponse = await fetch('https://localhost:7200/api/news/active-simple');
+                const activeData = await activeResponse.json();
+                console.log('Active news data:', activeData);
+                results.innerHTML += '<h3>Active News:</h3><pre>' + JSON.stringify(activeData, null, 2) + '</pre>';
+                
+                // Test categories endpoint
+                console.log('Testing categories endpoint...');
+                const categoriesResponse = await fetch('https://localhost:7200/api/categories/simple');
+                const categoriesData = await categoriesResponse.json();
+                console.log('Categories data:', categoriesData);
+                results.innerHTML += '<h3>Categories:</h3><pre>' + JSON.stringify(categoriesData, null, 2) + '</pre>';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                results.innerHTML += '<h3>Error:</h3><pre>' + error.message + '</pre>';
+            }
+        }
+        
+        // Run test when page loads
+        testAPI();
+    </script>
+</body>
+</html>

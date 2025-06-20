@@ -138,5 +138,20 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Controllers
 
             return NoContent();
         }
+
+        [AllowAnonymous]
+        [HttpGet("simple")]
+        public async Task<ActionResult<List<CategoryDTO>>> GetSimple()
+        {
+            var categories = await _categoryRepository.GetAll()
+                .Select(c => new CategoryDTO
+                {
+                    CategoryId = c.CategoryId,
+                    Name = c.Name,
+                    Status = c.Status,
+                    NewsCount = c.NewsArticles.Count
+                }).ToListAsync();
+            return Ok(categories);
+        }
     }
-} 
+}

@@ -73,6 +73,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Repositories
                 AccountId = accountId,
                 Status = 1, // Active
                 CreatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
                 ViewCount = 0
             };
 
@@ -111,6 +112,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Repositories
             news.Content = newsDto.Content;
             news.CategoryId = newsDto.CategoryId;
             news.Status = newsDto.Status;
+            news.UpdatedDate = DateTime.Now;
 
             // Update tags
             if (newsDto.TagIds != null)

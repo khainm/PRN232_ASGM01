@@ -100,7 +100,7 @@ const NewsList: React.FC<NewsListProps> = ({ isStaff = false }) => {
         methods.setValue('content', news.content);
         methods.setValue('categoryId', news.categoryId);
         methods.setValue('TagIds', []);
-        methods.setValue('status', news.status === 'Active' ? 1 : 0);
+        methods.setValue('status', news.status); // news.status is already a number (0 or 1)
         setShowModal(true);
     };
 
@@ -152,12 +152,13 @@ const NewsList: React.FC<NewsListProps> = ({ isStaff = false }) => {
         }
     };
 
-    const getStatusBadge = (status: string) => {
+    const getStatusBadge = (status: number) => {
+        const statusText = statusMap[status] || 'Unknown';
         const variants = {
             'Active': 'success',
             'Inactive': 'danger'
         };
-        return <Badge bg={variants[status as keyof typeof variants]}>{status}</Badge>;
+        return <Badge bg={variants[statusText as keyof typeof variants]}>{statusText}</Badge>;
     };
 
     const filteredNews = news.filter(item =>

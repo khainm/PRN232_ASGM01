@@ -28,6 +28,21 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.DTOs
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
+        /// Date when the news article was created (for frontend compatibility)
+        /// </summary>
+        public DateTime CreatedAt => CreatedDate;
+
+        /// <summary>
+        /// Date when the news article was last updated
+        /// </summary>
+        public DateTime UpdatedDate { get; set; }
+
+        /// <summary>
+        /// Date when the news article was last updated (for frontend compatibility)
+        /// </summary>
+        public DateTime UpdatedAt => UpdatedDate;
+
+        /// <summary>
         /// Status of the news article (0: Inactive, 1: Active)
         /// </summary>
         public int Status { get; set; }
@@ -48,13 +63,33 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.DTOs
         public int AccountId { get; set; }
 
         /// <summary>
+        /// ID of the author that created this news (for frontend compatibility)
+        /// </summary>
+        public int AuthorId => AccountId;
+
+        /// <summary>
         /// Name of the account that created this news
         /// </summary>
         public required string AccountName { get; set; }
 
         /// <summary>
+        /// Name of the author that created this news (for frontend compatibility)
+        /// </summary>
+        public string AuthorName => AccountName;
+
+        /// <summary>
         /// List of tags associated with this news
         /// </summary>
         public List<string> Tags { get; set; } = new();
+
+        /// <summary>
+        /// Thumbnail URL for the news article
+        /// </summary>
+        public string? Thumbnail { get; set; }
+
+        /// <summary>
+        /// View count for the news article
+        /// </summary>
+        public int ViewCount { get; set; }
     }
 } 

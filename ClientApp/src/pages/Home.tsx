@@ -18,12 +18,12 @@ const Home: React.FC = () => {
         const fetchData = async () => {
             try {
                 const [newsData, categoriesData] = await Promise.all([
-                    newsService.getActive(),
+                    newsService.getActiveSimple(),
                     newsService.getCategories()
                 ]);
-                console.log('Raw news data:', newsData); // Debug log
-                setNews(newsData);
-                setCategories(categoriesData);
+                
+                setNews(newsData || []);
+                setCategories(categoriesData || []);
                 
                 // Get user role if authenticated
                 if (authService.isAuthenticated()) {
@@ -162,9 +162,9 @@ const Home: React.FC = () => {
                 </Row>
 
                 <Row>
-                    {filteredNews.map(item => (
+                    {filteredNews.map((item) => (
                         <Col key={item.newsId} md={4} className="mb-4">
-                            <Card>
+                            <Card h-100>
                                 {item.thumbnail && (
                                     <Card.Img 
                                         variant="top" 
@@ -173,22 +173,24 @@ const Home: React.FC = () => {
                                         style={{ height: '200px', objectFit: 'cover' }}
                                     />
                                 )}
-                                <Card.Body>
+                                <Card.Body className="d-flex flex-column">
                                     <Card.Title>{item.title}</Card.Title>
-                                    <Card.Text>
+                                    <Card.Text className="flex-grow-1">
                                         {item.content.length > 150 
                                             ? `${item.content.substring(0, 150)}...` 
                                             : item.content}
                                     </Card.Text>
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <small className="text-muted">
-                                            {new Date(item.createdAt).toLocaleDateString()}
-                                        </small>
-                                        <Link to={`/news/${item.newsId}`}>
-                                            <Button variant="primary" size="sm">
-                                                Read More
-                                            </Button>
-                                        </Link>
+                                    <div className="mt-auto">
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <small className="text-muted">
+                                                {new Date(item.createdDate || item.createdAt).toLocaleDateString()}
+                                            </small>
+                                            <Link to={`/news/${item.newsId}`}>
+                                                <Button variant="primary" size="sm">
+                                                    Read More
+                                                </Button>
+                                            </Link>
+                                        </div>
                                     </div>
                                 </Card.Body>
                             </Card>

@@ -51,6 +51,16 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Controllers
             return _newsService.GetActiveNews();
         }
 
+        [AllowAnonymous]
+        [HttpGet("active-simple")]
+        [ResponseCache(Duration = 300)]
+        public async Task<ActionResult<List<NewsDTO>>> GetActiveSimple()
+        {
+            _logger.LogInformation("Getting active news (simple format)");
+            var activeNews = await _newsService.GetActiveNews().ToListAsync();
+            return Ok(activeNews);
+        }
+
         [EnableQuery(PageSize = 10, MaxTop = 100)]
         [AllowAnonymous]
         [HttpGet("search")]
@@ -281,5 +291,43 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [AllowAnonymous]
+        [HttpGet("debug")]
+        public async Task<ActionResult> GetDebugInfo()
+        {
+            _logger.LogInformation("Getting debug info");
+            
+            var totalNews = await _context.NewsArticles.CountAsync();
+            var activeNews = await _context.NewsArticles.Where(n => n.Status == 1).CountAsync();
+            var inactiveNews = await _context.NewsArticles.Where(n => n.Status == 0).CountAsync();
+            
+            var newsWithDetails = await _context.NewsArticles
+                .Include(n => n.Category)
+                .Include(n => n.Account)
+                .Select(n => new
+                {
+                    n.NewsId,
+                    n.Title,
+                    n.Status,
+                    CategoryName = n.Category != null ? n.Category.Name : "No Category",
+                    AuthorName = n.Account != null ? n.Account.FullName : "No Author",
+                    n.CreatedDate
+                })
+                .ToListAsync();
+            
+            var totalCategories = await _context.Categories.CountAsync();
+            var activeCategories = await _context.Categories.Where(c => c.Status == 1).CountAsync();
+            
+            return Ok(new
+            {
+                TotalNews = totalNews,
+                ActiveNews = activeNews,
+                InactiveNews = inactiveNews,
+                TotalCategories = totalCategories,
+                ActiveCategories = activeCategories,
+                NewsDetails = newsWithDetails
+            });
+        }
     }
-} 
+}

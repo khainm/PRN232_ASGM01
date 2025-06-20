@@ -1,4 +1,3 @@
-
 import api from './api'; // Import the configured api instance
 
 export interface NewsDTO {
@@ -13,7 +12,9 @@ export interface NewsDTO {
     status: number; // 1 = Active, 0 = Inactive
     tags: string[];
     createdAt: string;
+    createdDate?: string; // Backend might send this
     updatedAt: string;
+    updatedDate?: string; // Backend might send this
 }
 
 export interface CreateNewsDTO {
@@ -64,6 +65,16 @@ export interface NewsHistoryParams {
 class NewsService {
     async getAll(): Promise<NewsDTO[]> {
         const response = await api.get('/news');
+        return response.data;
+    }
+
+    async getDebugInfo() {
+        const response = await api.get('/news/debug');
+        return response.data;
+    }
+
+    async getActiveSimple(): Promise<NewsDTO[]> {
+        const response = await api.get('/news/active-simple');
         return response.data;
     }
 
@@ -123,7 +134,7 @@ class NewsService {
     }
 
     async getCategories() {
-        const response = await api.get('/categories');
+        const response = await api.get('/categories/simple');
         return response.data;
     }
 
@@ -149,4 +160,4 @@ class NewsService {
     }
 }
 
-export default new NewsService(); 
+export default new NewsService();
