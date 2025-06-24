@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Form, Button, Navbar, Nav } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Button, Navbar, Nav, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import newsService from '../services/newsService';
 import type { NewsDTO } from '../services/newsService';
@@ -12,19 +12,33 @@ const Home: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [userRole, setUserRole] = useState<number | null>(null);
+
+    const reloadData = async () => {
+        try {
+            setError(null);
+            const [newsData, categoriesData] = await Promise.all([
+                newsService.getActive(),
+                newsService.getCategories()
+            ]);
+            console.log('Received news data:', newsData);
+            console.log('Active news count:', newsData.filter(n => n.status === 1).length);
+            console.log('Inactive news count:', newsData.filter(n => n.status === 0).length);
+            
+            // Only set active news
+            setNews(newsData.filter(n => n.status === 1));
+            setCategories(categoriesData || []);
+        } catch (error) {
+            console.error('Error reloading data:', error);
+            setError('Failed to load news. Please try again later.');
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [newsData, categoriesData] = await Promise.all([
-                    newsService.getActive(),
-                    newsService.getCategories()
-                ]);
-                
-                setNews(newsData || []);
-                setCategories(categoriesData || []);
-                
+                await reloadData();
                 // Get user role if authenticated
                 if (authService.isAuthenticated()) {
                     const user = authService.getCurrentUser();
@@ -32,11 +46,32 @@ const Home: React.FC = () => {
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
+                setError('Failed to load news. Please try again later.');
             } finally {
                 setLoading(false);
             }
         };
         fetchData();
+
+        // Add visibility change listener
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                reloadData();
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        // Add focus listener
+        const handleFocus = () => {
+            reloadData();
+        };
+        window.addEventListener('focus', handleFocus);
+
+        // Cleanup
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('focus', handleFocus);
+        };
     }, []);
 
     const filteredNews = news.filter(item => {
@@ -131,6 +166,12 @@ const Home: React.FC = () => {
             </Navbar>
 
             <Container>
+                {error && (
+                    <Alert variant="danger" className="mb-4">
+                        {error}
+                    </Alert>
+                )}
+
                 <Row className="mb-4">
                     <Col md={4}>
                         <Form.Group>
@@ -198,7 +239,7 @@ const Home: React.FC = () => {
                     ))}
                 </Row>
 
-                {filteredNews.length === 0 && (
+                {filteredNews.length === 0 && !error && (
                     <div className="text-center py-5">
                         <h3>No news found</h3>
                         <p>Try adjusting your search or category filter</p>

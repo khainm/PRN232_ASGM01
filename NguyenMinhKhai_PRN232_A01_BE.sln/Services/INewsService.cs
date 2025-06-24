@@ -5,7 +5,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Services
     public interface INewsService
     {
         IQueryable<NewsDTO> GetAll();
-        IQueryable<NewsDTO> GetActiveNews();
+        Task<IEnumerable<NewsDTO>> GetActiveNews();
         IQueryable<NewsDTO> GetNewsByAccountId(int accountId);
         IQueryable<NewsDTO> SearchNews(string searchTerm);
         IQueryable<NewsDTO> GetNewsByDateRange(DateTime startDate, DateTime endDate);

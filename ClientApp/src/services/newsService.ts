@@ -22,18 +22,16 @@ export interface CreateNewsDTO {
     title: string;
     content: string;
     categoryId: number;
-    status: number;
-    imageUrl?: string;
     tagIds: number[];
+    status: number;
 }
 
 export interface UpdateNewsDTO {
     title: string;
     content: string;
     categoryId: number;
-    status: number;
-    imageUrl?: string;
     tagIds: number[];
+    status: number;
 }
 
 export interface NewsStatisticsDTO {
@@ -70,16 +68,23 @@ class NewsService {
     }
 
     async getActive(): Promise<NewsDTO[]> {
-        const response = await api.get('/news/active');
-        return response.data;
+        try {
+            // Add timestamp to prevent caching
+            const timestamp = new Date().getTime();
+            const response = await api.get(`/news/active?_t=${timestamp}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching active news:', error);
+            return [];
+        }
     }
 
     async search(term: string): Promise<NewsDTO[]> {
-        const response = await api.get('/news/search', { params: { term } });
+        const response = await api.get(`/news/search?term=${term}`);
         return response.data;
     }
 
-    async getById(id: number) {
+    async getById(id: number): Promise<NewsDTO> {
         const response = await api.get(`/news/${id}`);
         return response.data;
     }
@@ -104,28 +109,26 @@ class NewsService {
         return response.data;
     }
 
-    async create(data: CreateNewsDTO) {
-        const response = await api.post('/news', data);
+    async create(news: CreateNewsDTO): Promise<NewsDTO> {
+        const response = await api.post('/news', news);
         return response.data;
     }
 
-    async update(id: number, data: UpdateNewsDTO) {
-        const response = await api.put(`/news/${id}`, data);
+    async update(id: number, news: UpdateNewsDTO): Promise<NewsDTO> {
+        const response = await api.put(`/news/${id}`, news);
         return response.data;
     }
 
-    async delete(id: number) {
-        const response = await api.delete(`/news/${id}`);
-        return response.data;
+    async delete(id: number): Promise<void> {
+        await api.delete(`/news/${id}`);
     }
 
-    async incrementViewCount(id: number) {
-        const response = await api.post(`/news/${id}/view`);
-        return response.data;
+    async incrementViewCount(id: number): Promise<void> {
+        await api.post(`/news/${id}/increment-view`);
     }
 
-    async getCategories() {
-        const response = await api.get('/categories/simple');
+    async getCategories(): Promise<any[]> {
+        const response = await api.get('/categories');
         return response.data;
     }
 

@@ -4,6 +4,9 @@ const api = axios.create({
     baseURL: 'https://localhost:7200/api',
     headers: {
         'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
     },
     withCredentials: true
 });
@@ -15,6 +18,10 @@ api.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
+        // Add cache control headers to every request
+        config.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+        config.headers['Pragma'] = 'no-cache';
+        config.headers['Expires'] = '0';
         return config;
     },
     (error) => {

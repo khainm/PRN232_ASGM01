@@ -34,7 +34,6 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Controllers
         [EnableQuery(PageSize = 10, MaxTop = 100)]
         [AllowAnonymous]
         [HttpGet]
-        [ResponseCache(Duration = 300)] // Cache for 5 minutes
         public IQueryable<NewsDTO> Get()
         {
             _logger.LogInformation("Getting all news");
@@ -43,11 +42,16 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Controllers
 
         [AllowAnonymous]
         [HttpGet("active")]
-        [ResponseCache(Duration = 300)]
-        public async Task<ActionResult<List<NewsDTO>>> GetActive()
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public async Task<ActionResult<IEnumerable<NewsDTO>>> GetActive()
         {
             _logger.LogInformation("Getting active news");
-            var activeNews = await _newsService.GetActiveNews().ToListAsync();
+            var activeNews = await _newsService.GetActiveNews();
+            _logger.LogInformation($"Found {activeNews.Count()} active news articles");
+            foreach (var news in activeNews)
+            {
+                _logger.LogInformation($"News ID: {news.NewsId}, Title: {news.Title}, Status: {news.Status}");
+            }
             return Ok(activeNews);
         }
 

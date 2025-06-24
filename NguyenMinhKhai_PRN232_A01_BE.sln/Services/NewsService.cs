@@ -27,11 +27,21 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Services
             return _mapper.Map<List<NewsDTO>>(news).AsQueryable();
         }
 
-        public IQueryable<NewsDTO> GetActiveNews()
+        public async Task<IEnumerable<NewsDTO>> GetActiveNews()
         {
-            _logger.LogInformation("Getting active news");
-            var news = _newsRepository.GetActiveNews().ToList();
-            return _mapper.Map<List<NewsDTO>>(news).AsQueryable();
+            _logger.LogInformation("Getting active news from repository");
+            var activeNews = await _newsRepository.GetActiveNews()
+                .Where(n => n.Status == 1)  // Double check status is active
+                .ToListAsync();
+            _logger.LogInformation($"Found {activeNews.Count} active news articles in repository");
+            
+            var newsDto = _mapper.Map<IEnumerable<NewsDTO>>(activeNews);
+            _logger.LogInformation($"Mapped {newsDto.Count()} news articles to DTOs");
+            foreach (var news in newsDto)
+            {
+                _logger.LogInformation($"Mapped News - ID: {news.NewsId}, Title: {news.Title}, Status: {news.Status}");
+            }
+            return newsDto;
         }
 
         public IQueryable<NewsDTO> GetNewsByAccountId(int accountId)
