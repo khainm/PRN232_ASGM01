@@ -1,6 +1,5 @@
-import axios from 'axios';
-import type { Account } from '../types/Account';    // eslint-disable-line @typescript-eslint/no-unused-vars
-import api from './api'; // Import the configured api instance
+import type { Account } from '../types/Account';
+import api from './api';
 import type { LoginDTO } from '../types/Auth';
 import type { AccountDTO, CreateAccountDTO, UpdateAccountDTO, UpdateProfileDTO } from '../types/Account';
 

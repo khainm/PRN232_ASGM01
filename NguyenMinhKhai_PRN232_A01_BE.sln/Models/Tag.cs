@@ -17,7 +17,6 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Models
         [Required]
         public DateTime CreatedDate { get; set; }
 
-        public int? NewsId { get; set; }
-        public News? News { get; set; }
+        public ICollection<News> NewsArticles { get; set; } = new List<News>();
     }
 }

@@ -18,7 +18,7 @@ const Home: React.FC = () => {
         const fetchData = async () => {
             try {
                 const [newsData, categoriesData] = await Promise.all([
-                    newsService.getActiveSimple(),
+                    newsService.getActive(),
                     newsService.getCategories()
                 ]);
                 
@@ -164,7 +164,7 @@ const Home: React.FC = () => {
                 <Row>
                     {filteredNews.map((item) => (
                         <Col key={item.newsId} md={4} className="mb-4">
-                            <Card h-100>
+                            <Card className="h-100">
                                 {item.thumbnail && (
                                     <Card.Img 
                                         variant="top" 

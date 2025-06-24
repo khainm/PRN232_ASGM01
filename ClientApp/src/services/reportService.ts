@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { format } from 'date-fns';
-import api from './api'; // Import the configured api instance
+import api from './api';
+import type { NewsStatisticsDTO } from '../types/News';
 
 export interface NewsReportData {
     date: string;
@@ -9,9 +9,6 @@ export interface NewsReportData {
     draft: number;
     byCategory: { [key: string]: number };
 }
-
-// Import NewsStatisticsDTO từ types/News.ts để sử dụng cho response
-import type { NewsStatisticsDTO } from '../types/News';
 
 export interface Statistics {
     totalNews: number;

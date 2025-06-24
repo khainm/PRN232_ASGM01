@@ -157,15 +157,16 @@ const NewsForm: React.FC<NewsFormProps> = ({ isNew, initialTagIds = [] }) => {
                         )}
                     </Form.Group>
 
-                    {!isNew && (
-                        <Form.Group className="mb-3">
-                            <Form.Label>Status</Form.Label>
-                            <Form.Select {...register('status')}>
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </Form.Select>
-                        </Form.Group>
-                    )}
+                    <Form.Group className="mb-3">
+                        <Form.Label>Status</Form.Label>
+                        <Form.Select {...register('status')}>
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.status?.message as string}
+                        </Form.Control.Feedback>
+                    </Form.Group>
                 </Col>
             </Row>
         </div>

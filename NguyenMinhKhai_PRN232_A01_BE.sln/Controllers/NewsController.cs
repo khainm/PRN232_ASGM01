@@ -41,14 +41,14 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Controllers
             return _newsService.GetAll();
         }
 
-        [EnableQuery(PageSize = 10, MaxTop = 100)]
         [AllowAnonymous]
         [HttpGet("active")]
         [ResponseCache(Duration = 300)]
-        public IQueryable<NewsDTO> GetActive()
+        public async Task<ActionResult<List<NewsDTO>>> GetActive()
         {
             _logger.LogInformation("Getting active news");
-            return _newsService.GetActiveNews();
+            var activeNews = await _newsService.GetActiveNews().ToListAsync();
+            return Ok(activeNews);
         }
 
         [AllowAnonymous]

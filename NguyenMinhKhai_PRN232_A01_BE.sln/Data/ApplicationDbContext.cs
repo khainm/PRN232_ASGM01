@@ -100,9 +100,12 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Data
 
                 // Configure many-to-many relationship with Tags
                 entity.HasMany(e => e.Tags)
-                    .WithOne(e => e.News)
-                    .HasForeignKey(e => e.NewsId)
-                    .OnDelete(DeleteBehavior.Cascade); // Allow cascade delete for tags
+                    .WithMany(e => e.NewsArticles)
+                    .UsingEntity(
+                        "NewsTags",
+                        l => l.HasOne(typeof(Tag)).WithMany().HasForeignKey("TagId").OnDelete(DeleteBehavior.Cascade),
+                        r => r.HasOne(typeof(News)).WithMany().HasForeignKey("NewsId").OnDelete(DeleteBehavior.Cascade)
+                    );
 
                 // Seed news articles
                 var seedDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
