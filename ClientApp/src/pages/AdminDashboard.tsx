@@ -60,9 +60,7 @@ const AdminDashboard: React.FC = () => {
                     <Tab eventKey="accounts" title="Accounts">
                         {activeTab === 'accounts' && <AccountList />}
                     </Tab>
-                    <Tab eventKey="news" title="News">
-                        {activeTab === 'news' && <NewsList isStaff={false} />}
-                    </Tab>
+                   
                     <Tab eventKey="reports" title="Reports">
                         {activeTab === 'reports' && 
                             <AdminReports />

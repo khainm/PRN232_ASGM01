@@ -69,16 +69,6 @@ class NewsService {
         return response.data;
     }
 
-    async getDebugInfo() {
-        const response = await api.get('/news/debug');
-        return response.data;
-    }
-
-    async getActiveSimple(): Promise<NewsDTO[]> {
-        const response = await api.get('/news/active-simple');
-        return response.data;
-    }
-
     async getActive(): Promise<NewsDTO[]> {
         const response = await api.get('/news/active');
         return response.data;
