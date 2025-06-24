@@ -11,6 +11,7 @@ export interface NewsDTO {
     authorName: string;
     status: number; // 1 = Active, 0 = Inactive
     tags: string[];
+    tagIds?: number[];
     createdAt: string;
     createdDate?: string; // Backend might send this
     updatedAt: string;
@@ -23,7 +24,7 @@ export interface CreateNewsDTO {
     categoryId: number;
     status: number;
     imageUrl?: string;
-    tags?: string[];
+    tagIds: number[];
 }
 
 export interface UpdateNewsDTO {
@@ -32,7 +33,7 @@ export interface UpdateNewsDTO {
     categoryId: number;
     status: number;
     imageUrl?: string;
-    tags?: string[];
+    tagIds: number[];
 }
 
 export interface NewsStatisticsDTO {

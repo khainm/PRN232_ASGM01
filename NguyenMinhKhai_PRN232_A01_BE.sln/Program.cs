@@ -90,12 +90,14 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 // Add Services
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<ITagService, TagService>();
 
 // Add Authentication
 builder.Services.AddAuthentication(options =>

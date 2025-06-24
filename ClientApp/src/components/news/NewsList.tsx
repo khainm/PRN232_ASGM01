@@ -94,13 +94,15 @@ const NewsList: React.FC<NewsListProps> = ({ isStaff = false }) => {
     };
 
     const handleEdit = (news: NewsDTO) => {
+        console.log('Editing news:', news);
         setIsNew(false);
         setSelectedNews(news);
         methods.setValue('title', news.title);
         methods.setValue('content', news.content);
         methods.setValue('categoryId', news.categoryId);
-        methods.setValue('TagIds', []);
-        methods.setValue('status', news.status); // news.status is already a number (0 or 1)
+        console.log('Setting tag IDs:', news.tagIds || []);
+        methods.setValue('TagIds', news.tagIds || []);
+        methods.setValue('status', news.status);
         setShowModal(true);
     };
 
@@ -232,7 +234,10 @@ const NewsList: React.FC<NewsListProps> = ({ isStaff = false }) => {
             >
                 {showModal && (
                     <FormProvider {...methods}>
-                        <NewsForm isNew={isNew} />
+                        <NewsForm 
+                            isNew={isNew} 
+                            initialTagIds={selectedNews?.tagIds || []}
+                        />
                     </FormProvider>
                 )}
             </ModalForm>

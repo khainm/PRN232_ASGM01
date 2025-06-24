@@ -83,6 +83,11 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.DTOs
         public List<string> Tags { get; set; } = new();
 
         /// <summary>
+        /// List of tag IDs associated with this news
+        /// </summary>
+        public List<int> TagIds { get; set; } = new();
+
+        /// <summary>
         /// Thumbnail URL for the news article
         /// </summary>
         public string? Thumbnail { get; set; }

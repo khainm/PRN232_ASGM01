@@ -23,36 +23,36 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Services
         public IQueryable<NewsDTO> GetAll()
         {
             _logger.LogInformation("Getting all news");
-            var news = _newsRepository.GetAll();
-            return _mapper.ProjectTo<NewsDTO>(news);
+            var news = _newsRepository.GetAll().ToList();
+            return _mapper.Map<List<NewsDTO>>(news).AsQueryable();
         }
 
         public IQueryable<NewsDTO> GetActiveNews()
         {
             _logger.LogInformation("Getting active news");
-            var news = _newsRepository.GetActiveNews();
-            return _mapper.ProjectTo<NewsDTO>(news);
+            var news = _newsRepository.GetActiveNews().ToList();
+            return _mapper.Map<List<NewsDTO>>(news).AsQueryable();
         }
 
         public IQueryable<NewsDTO> GetNewsByAccountId(int accountId)
         {
             _logger.LogInformation($"Getting news for account ID: {accountId}");
-            var news = _newsRepository.GetNewsByAccountId(accountId);
-            return _mapper.ProjectTo<NewsDTO>(news);
+            var news = _newsRepository.GetNewsByAccountId(accountId).ToList();
+            return _mapper.Map<List<NewsDTO>>(news).AsQueryable();
         }
 
         public IQueryable<NewsDTO> SearchNews(string searchTerm)
         {
             _logger.LogInformation($"Searching news with term: {searchTerm}");
-            var news = _newsRepository.SearchNews(searchTerm);
-            return _mapper.ProjectTo<NewsDTO>(news);
+            var news = _newsRepository.SearchNews(searchTerm).ToList();
+            return _mapper.Map<List<NewsDTO>>(news).AsQueryable();
         }
 
         public IQueryable<NewsDTO> GetNewsByDateRange(DateTime startDate, DateTime endDate)
         {
             _logger.LogInformation($"Getting news from {startDate} to {endDate}");
-            var news = _newsRepository.GetNewsByDateRange(startDate, endDate);
-            return _mapper.ProjectTo<NewsDTO>(news);
+            var news = _newsRepository.GetNewsByDateRange(startDate, endDate).ToList();
+            return _mapper.Map<List<NewsDTO>>(news).AsQueryable();
         }
 
         public async Task<NewsDTO?> GetByIdAsync(int id)

@@ -2,27 +2,38 @@ import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Button, Badge } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import categoryService from '../../services/categoryService';
+import tagService from '../../services/tagService';
+import type { TagDTO } from '../../services/tagService';
 
 interface NewsFormProps {
     isNew: boolean;
+    initialTagIds?: number[];
 }
 
-const NewsForm: React.FC<NewsFormProps> = ({ isNew }) => {
+const NewsForm: React.FC<NewsFormProps> = ({ isNew, initialTagIds = [] }) => {
     const { register, formState: { errors }, setValue, watch } = useFormContext();
     const [categories, setCategories] = useState<{ categoryId: number; name: string }[]>([]);
-    const [tagIds, setTagIds] = useState<number[]>([]);
-    const [newTagInput, setNewTagInput] = useState('');
-    const watchedTagIds = watch('TagIds'); // Watch TagIds from form state
+    const [tags, setTags] = useState<TagDTO[]>([]);
+    const [selectedTags, setSelectedTags] = useState<number[]>(initialTagIds);
+    const watchedTagIds = watch('TagIds');
 
     useEffect(() => {
-        // Load categories
         loadCategories();
-         console.log('NewsForm mounted or updated'); // Log component lifecycle
+        loadTags();
     }, []);
 
     useEffect(() => {
-        console.log('watchedTagIds changed:', watchedTagIds); // Log when the form value for TagIds changes
-    }, [watchedTagIds]);
+        console.log('Setting TagIds value:', selectedTags);
+        setValue('TagIds', selectedTags);
+    }, [selectedTags, setValue]);
+
+    useEffect(() => {
+        console.log('Initial tag IDs:', initialTagIds);
+        if (initialTagIds.length > 0) {
+            console.log('Setting initial tags:', initialTagIds);
+            setSelectedTags(initialTagIds);
+        }
+    }, [initialTagIds]);
 
     const loadCategories = async () => {
         try {
@@ -33,35 +44,26 @@ const NewsForm: React.FC<NewsFormProps> = ({ isNew }) => {
         }
     };
 
-    const handleAddTagId = () => {
-        console.log('Attempting to add tag IDs from input:', newTagInput); // Log input value
-        const ids = newTagInput.split(',').map(id => parseInt(id.trim(), 10)).filter(id => !isNaN(id));
-        if (ids.length > 0) {
-            const updatedTagIds = [...tagIds];
-             ids.forEach(id => {
-                 if (!updatedTagIds.includes(id)) {
-                     updatedTagIds.push(id);
-                 }
-             });
-            console.log('Updated tagIds state:', updatedTagIds); // Log updated state
-            setTagIds(updatedTagIds);
-            // setValue('TagIds', updatedTagIds); // Moved setValue to useEffect
-            setNewTagInput('');
+    const loadTags = async () => {
+        try {
+            const data = await tagService.getAll();
+            console.log('Loaded tags:', data);
+            setTags(data);
+        } catch (error) {
+            console.error('Error loading tags:', error);
         }
     };
 
-    const handleRemoveTagId = (idToRemove: number) => {
-        console.log('Attempting to remove tag ID:', idToRemove); // Log ID to remove
-        const updatedTagIds = tagIds.filter(id => id !== idToRemove);
-        console.log('Updated tagIds state after removal:', updatedTagIds); // Log updated state after removal
-        setTagIds(updatedTagIds);
-        // setValue('TagIds', updatedTagIds); // Moved setValue to useEffect
+    const handleTagSelect = (tagId: number) => {
+        console.log('Tag selected:', tagId);
+        setSelectedTags(prev => {
+            const newTags = prev.includes(tagId)
+                ? prev.filter(id => id !== tagId)
+                : [...prev, tagId];
+            console.log('New selected tags:', newTags);
+            return newTags;
+        });
     };
-
-    useEffect(() => {
-        console.log('Setting form value for TagIds:', tagIds); // Log value being set to form
-        setValue('TagIds', tagIds);
-    }, [tagIds, setValue]);
 
     return (
         <div>
@@ -115,40 +117,44 @@ const NewsForm: React.FC<NewsFormProps> = ({ isNew }) => {
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Tag IDs (comma-separated)</Form.Label>
-                        <div className="d-flex mb-2">
-                            <Form.Control
-                                type="text"
-                                value={newTagInput}
-                                onChange={(e) => setNewTagInput(e.target.value)}
-                                placeholder="Enter Tag IDs (e.g., 1, 2 ,3 ,4 )"
-                            />
-                            <Button
-                                variant="outline-primary"
-                                className="ms-2"
-                                onClick={handleAddTagId}
-                            >
-                                Add IDs
-                            </Button>
-                        </div>
-                        <div className="d-flex flex-wrap gap-2">
-                            {tagIds.map(id => (
-                                <Badge
-                                    key={id}
-                                    bg="secondary"
-                                    className="d-flex align-items-center"
-                                >
-                                    Tag ID: {id}
-                                    <Button
-                                        variant="link"
-                                        className="text-white p-0 ms-2"
-                                        onClick={() => handleRemoveTagId(id)}
-                                    >
-                                        ×
-                                    </Button>
-                                </Badge>
+                        <Form.Label>Tags</Form.Label>
+                        <Form.Select
+                            value=""
+                            onChange={(e) => handleTagSelect(Number(e.target.value))}
+                        >
+                            <option value="">Select Tag</option>
+                            {tags.map(tag => (
+                                <option key={tag.tagId} value={tag.tagId}>
+                                    {tag.name}
+                                </option>
                             ))}
+                        </Form.Select>
+                        <div className="mt-2 d-flex flex-wrap gap-2">
+                            {selectedTags.map(tagId => {
+                                const tag = tags.find(t => t.tagId === tagId);
+                                return (
+                                    <Badge
+                                        key={tagId}
+                                        bg="secondary"
+                                        className="d-flex align-items-center"
+                                    >
+                                        {tag?.name || `Tag ${tagId}`}
+                                        <Button
+                                            variant="link"
+                                            className="text-white p-0 ms-2"
+                                            onClick={() => handleTagSelect(tagId)}
+                                        >
+                                            ×
+                                        </Button>
+                                    </Badge>
+                                );
+                            })}
                         </div>
+                        {errors.TagIds && (
+                            <div className="text-danger mt-1">
+                                {errors.TagIds.message as string}
+                            </div>
+                        )}
                     </Form.Group>
 
                     {!isNew && (

@@ -31,6 +31,7 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Mappings
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : string.Empty))
                 .ForMember(dest => dest.AccountName, opt => opt.MapFrom(src => src.Account != null ? src.Account.FullName : string.Empty))
                 .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.Select(t => t.Name)))
+                .ForMember(dest => dest.TagIds, opt => opt.MapFrom(src => src.Tags.Select(t => t.TagId)))
                 .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedDate))
                 .ForMember(dest => dest.ViewCount, opt => opt.MapFrom(src => src.ViewCount))
                 .ForMember(dest => dest.Thumbnail, opt => opt.MapFrom(src => (string?)null)); // No thumbnail field in current model
