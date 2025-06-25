@@ -136,7 +136,7 @@ const Register: React.FC = () => {
                                         required
                                     >
                                         <option value={1}>Staff</option>
-                                        <option value={0}>Admin</option>
+                                        
                                     </Form.Select>
                                 </Form.Group>
 
