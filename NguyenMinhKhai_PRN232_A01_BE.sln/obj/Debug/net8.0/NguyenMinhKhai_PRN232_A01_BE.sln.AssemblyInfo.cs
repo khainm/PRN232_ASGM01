@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NguyenMinhKhai_PRN232_A01_BE.sln")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9d69f1782ba830627421b79d656097f28d8c9883")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f3bbc6f83014f02a59e793a67a2ada1a0f85c18")]
 [assembly: System.Reflection.AssemblyProductAttribute("NguyenMinhKhai_PRN232_A01_BE.sln")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NguyenMinhKhai_PRN232_A01_BE.sln")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

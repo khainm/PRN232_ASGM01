@@ -1,65 +1,67 @@
 ﻿<Properties StartupConfiguration="{BF21F298-A323-41FD-BB21-A5567A421BBE}|https">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/AuthController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
     <Files>
-      <File FileName="Program.cs" Line="172" Column="62" />
+      <File FileName="Program.cs" Line="237" Column="1" />
       <File FileName="Models/Account.cs" />
       <File FileName="NguyenMinhKhai_PRN232_A01_BE.sln.http" />
       <File FileName="Data/ApplicationDbContext.cs" Line="1" Column="1" />
       <File FileName="Controllers/NewsController.cs" />
-      <File FileName="Controllers/AccountsController.cs" Line="1" Column="1" />
+      <File FileName="Controllers/AccountsController.cs" />
       <File FileName="Controllers/AuthController.cs" Line="1" Column="1" />
       <File FileName="Controllers/CategoriesController.cs" />
       <File FileName="Models/Category.cs" />
-      <File FileName="Models/News.cs" />
-      <File FileName="Models/Tag.cs" />
+      <File FileName="Models/News.cs" Line="7" Column="18" />
+      <File FileName="Models/Tag.cs" Line="20" Column="66" />
       <File FileName="DTOs/AccountDTO.cs" />
-      <File FileName="Properties/launchSettings.json" Line="1" Column="1" />
+      <File FileName="Properties/launchSettings.json" />
       <File FileName="DTOs/AuthDTO.cs" />
-      <File FileName="Mappings/AutoMapperProfile.cs" Line="31" Column="81" />
+      <File FileName="Mappings/AutoMapperProfile.cs" />
       <File FileName="Repositories/CategoryRepository.cs" />
-      <File FileName="DTOs/NewsDTO.cs" Line="8" Column="18" />
-      <File FileName="DTOs/UpdateNewsDTO.cs" Line="1" Column="1" />
-      <File FileName="Services/AccountService.cs" Line="13" Column="2" />
-      <File FileName="Services/NewsService.cs" Line="34" Column="42" />
+      <File FileName="DTOs/NewsDTO.cs" />
+      <File FileName="DTOs/UpdateNewsDTO.cs" />
+      <File FileName="Services/AccountService.cs" />
+      <File FileName="Services/NewsService.cs" />
       <File FileName="Repositories/INewsRepository.cs" />
       <File FileName="Repositories/ICategoryRepository.cs" />
       <File FileName="Repositories/IAccountRepository.cs" />
       <File FileName="Repositories/NewsRepository.cs" />
       <File FileName="Services/CategoryService.cs" />
       <File FileName="Services/IAccountService.cs" />
-      <File FileName="DTOs/UpdateProfileDTO.cs" Line="1" Column="1" />
+      <File FileName="DTOs/UpdateProfileDTO.cs" />
       <File FileName="Controllers/ReportsController.cs" />
       <File FileName="Services/ReportService.cs" />
       <File FileName="DTOs/Validation/CategoryExistsAttribute.cs" Line="1" Column="1" />
-      <File FileName="Services/INewsService.cs" Line="1" Column="1" />
-      <File FileName="Services/IReportService.cs" Line="1" Column="1" />
-      <File FileName="DTOs/CreateTagDTO.cs" Line="1" Column="1" />
-      <File FileName="DTOs/CreateNewsDTO.cs" Line="1" Column="1" />
-      <File FileName="DTOs/UpdateTagDTO.cs" Line="1" Column="1" />
-      <File FileName="appsettings.json" Line="1" Column="1" />
+      <File FileName="Services/INewsService.cs" />
+      <File FileName="Services/IReportService.cs" />
+      <File FileName="DTOs/CreateNewsDTO.cs" />
+      <File FileName="appsettings.json" />
+      <File FileName="DTOs/TagDTO.cs" Line="17" Column="1" />
+      <File FileName="Controllers/TagsController.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="NguyenMinhKhai_PRN232_A01_BE.sln" expanded="True">
-            <Node name="NguyenMinhKhai_PRN232_A01_BE.sln" expanded="True">
-              <Node name="Controllers" expanded="True">
-                <Node name="AuthController.cs" selected="True" />
+          <Node name="NguyenMinhKhai_PRN232_A01_BE.sln">
+            <Node name="NguyenMinhKhai_PRN232_A01_BE.sln">
+              <Node name="Data" expanded="True" />
+              <Node name="DTOs" expanded="True">
+                <Node name="Validation" expanded="True" />
               </Node>
               <Node name="Mappings" expanded="True" />
+              <Node name="Models" expanded="True" />
               <Node name="Properties" expanded="True" />
-              <Node name="Services" expanded="True" />
+              <Node name="Program.cs" selected="True" />
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.NguyenMinhKhai__PRN232__A01__BE.sln PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.NguyenMinhKhai__PRN232__A01__BE.sln PreferredExecutionTarget="/Applications/Google Chrome.app" />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
