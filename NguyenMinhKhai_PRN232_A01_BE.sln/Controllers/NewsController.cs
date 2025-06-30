@@ -31,12 +31,58 @@ namespace NguyenMinhKhai_PRN232_A01_BE.sln.Controllers
         }
 
         // OData Endpoints
-        [EnableQuery(PageSize = 10, MaxTop = 100)]
+        [EnableQuery(PageSize = 10, MaxTop = 100, AllowedQueryOptions = AllowedQueryOptions.All)]
         [AllowAnonymous]
         [HttpGet]
         public IQueryable<NewsDTO> Get()
         {
-            _logger.LogInformation("Getting all news");
+            _logger.LogInformation("Getting all news with OData support");
+            return _newsService.GetAll();
+        }
+
+        // OData Filter Endpoints
+        [EnableQuery(PageSize = 10, MaxTop = 100)]
+        [AllowAnonymous]
+        [HttpGet("odata/filter")]
+        public IQueryable<NewsDTO> GetWithODataFilter()
+        {
+            _logger.LogInformation("Getting news with OData filters");
+            return _newsService.GetAll();
+        }
+
+        [EnableQuery(PageSize = 10, MaxTop = 100)]
+        [AllowAnonymous]
+        [HttpGet("odata/active")]
+        public IQueryable<NewsDTO> GetActiveWithODataFilter()
+        {
+            _logger.LogInformation("Getting active news with OData filters");
+            return _newsService.GetAll().Where(n => n.Status == 1);
+        }
+
+        [EnableQuery(PageSize = 10, MaxTop = 100)]
+        [AllowAnonymous]
+        [HttpGet("odata/by-category")]
+        public IQueryable<NewsDTO> GetByCategoryWithODataFilter()
+        {
+            _logger.LogInformation("Getting news by category with OData filters");
+            return _newsService.GetAll();
+        }
+
+        [EnableQuery(PageSize = 10, MaxTop = 100)]
+        [AllowAnonymous]
+        [HttpGet("odata/featured")]
+        public IQueryable<NewsDTO> GetFeaturedWithODataFilter()
+        {
+            _logger.LogInformation("Getting featured news with OData filters");
+            return _newsService.GetAll();
+        }
+
+        [EnableQuery(PageSize = 10, MaxTop = 100)]
+        [Authorize(Policy = "RequireAdminOrStaffRole")]
+        [HttpGet("odata/admin")]
+        public IQueryable<NewsDTO> GetAllForAdminWithODataFilter()
+        {
+            _logger.LogInformation("Getting all news for admin with OData filters");
             return _newsService.GetAll();
         }
 

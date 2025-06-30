@@ -10,24 +10,30 @@ const Home: React.FC = () => {
     const [news, setNews] = useState<NewsDTO[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-    const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [userRole, setUserRole] = useState<number | null>(null);
+    const [sortBy, setSortBy] = useState<string>('CreatedDate desc');
+    const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
+    const [searchInput, setSearchInput] = useState(''); // For immediate UI updates
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(''); // For API calls
 
     const reloadData = async () => {
         try {
             setError(null);
             const [newsData, categoriesData] = await Promise.all([
-                newsService.getActive(),
+                newsService.getNewsWithFilters({
+                    categoryId: selectedCategory || undefined,
+                    searchTerm: debouncedSearchTerm || undefined,
+                    featured: showFeaturedOnly || undefined,
+                    orderBy: sortBy,
+                    pageSize: 50
+                }),
                 newsService.getCategories()
             ]);
-            console.log('Received news data:', newsData);
-            console.log('Active news count:', newsData.filter(n => n.status === 1).length);
-            console.log('Inactive news count:', newsData.filter(n => n.status === 0).length);
+            console.log('Received news data with OData:', newsData);
             
-            // Only set active news
-            setNews(newsData.filter(n => n.status === 1));
+            setNews(newsData);
             setCategories(categoriesData || []);
         } catch (error) {
             console.error('Error reloading data:', error);
@@ -72,15 +78,25 @@ const Home: React.FC = () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
             window.removeEventListener('focus', handleFocus);
         };
-    }, []);
+    }, [selectedCategory, debouncedSearchTerm, showFeaturedOnly, sortBy]);
 
-    const filteredNews = news.filter(item => {
-        const matchesCategory = !selectedCategory || item.categoryId === selectedCategory;
-        const matchesSearch = !searchTerm || 
-            item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.content.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesCategory && matchesSearch;
-    });
+    // Debounce search input
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchTerm(searchInput);
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [searchInput]);
+
+    // Effect to reload data when filters change
+    useEffect(() => {
+        if (!loading) {
+            reloadData();
+        }
+    }, [selectedCategory, debouncedSearchTerm, showFeaturedOnly, sortBy]);
+
+    const filteredNews = news; // Remove client-side filtering since we're using OData
 
     const handleLogout = () => {
         authService.logout();
@@ -173,7 +189,7 @@ const Home: React.FC = () => {
                 )}
 
                 <Row className="mb-4">
-                    <Col md={4}>
+                    <Col md={3}>
                         <Form.Group>
                             <Form.Label>Category</Form.Label>
                             <Form.Select
@@ -189,16 +205,60 @@ const Home: React.FC = () => {
                             </Form.Select>
                         </Form.Group>
                     </Col>
-                    <Col md={8}>
+                    <Col md={4}>
                         <Form.Group>
                             <Form.Label>Search</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Search news..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
+                                value={searchInput}
+                                onChange={(e) => setSearchInput(e.target.value)}
                             />
                         </Form.Group>
+                    </Col>
+                    <Col md={3}>
+                        <Form.Group>
+                            <Form.Label>Sort By</Form.Label>
+                            <Form.Select
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value)}
+                            >
+                                <option value="CreatedDate desc">Newest First</option>
+                                <option value="CreatedDate asc">Oldest First</option>
+                                <option value="Title asc">Title A-Z</option>
+                                <option value="Title desc">Title Z-A</option>
+                                <option value="ViewCount desc">Most Viewed</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
+                    <Col md={2}>
+                        <Form.Group>
+                            <Form.Label>&nbsp;</Form.Label>
+                            <Form.Check
+                                type="checkbox"
+                                label="Featured Only"
+                                checked={showFeaturedOnly}
+                                onChange={(e) => setShowFeaturedOnly(e.target.checked)}
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+
+                {/* Results info */}
+                <Row className="mb-3">
+                    <Col>
+                        <small className="text-muted">
+                            Found {filteredNews.length} news articles
+                            {selectedCategory && categories.find(c => c.categoryId === selectedCategory) && (
+                                <span> in category "{categories.find(c => c.categoryId === selectedCategory)?.name}"</span>
+                            )}
+                            {debouncedSearchTerm && (
+                                <span> matching "{debouncedSearchTerm}"</span>
+                            )}
+                            {showFeaturedOnly && (
+                                <span> (featured only)</span>
+                            )}
+                        </small>
                     </Col>
                 </Row>
 

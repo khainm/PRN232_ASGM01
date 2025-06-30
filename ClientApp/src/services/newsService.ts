@@ -61,6 +61,21 @@ export interface NewsHistoryParams {
     endDate?: Date;
 }
 
+export interface ODataQueryParams {
+    filter?: string;
+    orderby?: string;
+    top?: number;
+    skip?: number;
+    select?: string;
+    count?: boolean;
+}
+
+export interface ODataResponse<T> {
+    value: T[];
+    '@odata.count'?: number;
+    '@odata.nextLink'?: string;
+}
+
 class NewsService {
     async getAll(): Promise<NewsDTO[]> {
         const response = await api.get('/news');
@@ -151,6 +166,153 @@ class NewsService {
 
         const response = await api.get<NewsHistoryResponse>(`/news/history?${queryParams}`);
         return response.data;
+    }
+
+    async getOData(queryParams: ODataQueryParams): Promise<ODataResponse<NewsDTO>> {
+        const response = await api.get<ODataResponse<NewsDTO>>('/news/odata', { params: queryParams });
+        return response.data;
+    }
+
+    // OData Methods
+    buildODataQuery(params: ODataQueryParams): string {
+        const queryParts: string[] = [];
+        
+        if (params.filter) {
+            queryParts.push(`$filter=${encodeURIComponent(params.filter)}`);
+        }
+        
+        if (params.orderby) {
+            queryParts.push(`$orderby=${encodeURIComponent(params.orderby)}`);
+        }
+        
+        if (params.top) {
+            queryParts.push(`$top=${params.top}`);
+        }
+        
+        if (params.skip) {
+            queryParts.push(`$skip=${params.skip}`);
+        }
+        
+        if (params.select) {
+            queryParts.push(`$select=${encodeURIComponent(params.select)}`);
+        }
+        
+        if (params.count) {
+            queryParts.push(`$count=true`);
+        }
+        
+        return queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+    }
+
+    async getAllWithOData(params?: ODataQueryParams): Promise<NewsDTO[]> {
+        const query = params ? this.buildODataQuery(params) : '';
+        const response = await api.get(`/news${query}`);
+        return response.data.value || response.data;
+    }
+
+    async getActiveWithOData(params?: ODataQueryParams): Promise<NewsDTO[]> {
+        try {
+            let baseFilter = 'Status eq 1';
+            if (params?.filter) {
+                baseFilter = `(${baseFilter}) and (${params.filter})`;
+            }
+            
+            const odataParams = {
+                ...params,
+                filter: baseFilter
+            };
+            
+            const query = this.buildODataQuery(odataParams);
+            const timestamp = new Date().getTime();
+            const response = await api.get(`/news/odata/active${query}&_t=${timestamp}`);
+            return response.data.value || response.data;
+        } catch (error) {
+            console.error('Error fetching active news with OData:', error);
+            return [];
+        }
+    }
+
+    async getWithCategoryFilter(categoryId: number, params?: ODataQueryParams): Promise<NewsDTO[]> {
+        try {
+            let baseFilter = `CategoryId eq ${categoryId} and Status eq 1`;
+            if (params?.filter) {
+                baseFilter = `(${baseFilter}) and (${params.filter})`;
+            }
+            
+            const odataParams = {
+                ...params,
+                filter: baseFilter
+            };
+            
+            const query = this.buildODataQuery(odataParams);
+            const response = await api.get(`/news${query}`);
+            return response.data.value || response.data;
+        } catch (error) {
+            console.error('Error fetching news by category with OData:', error);
+            return [];
+        }
+    }
+
+    async searchWithOData(searchTerm: string, params?: ODataQueryParams): Promise<NewsDTO[]> {
+        try {
+            let baseFilter = `contains(Title,'${searchTerm}') or contains(Content,'${searchTerm}')`;
+            baseFilter = `(${baseFilter}) and Status eq 1`;
+            
+            if (params?.filter) {
+                baseFilter = `(${baseFilter}) and (${params.filter})`;
+            }
+            
+            const odataParams = {
+                ...params,
+                filter: baseFilter
+            };
+            
+            const query = this.buildODataQuery(odataParams);
+            const response = await api.get(`/news${query}`);
+            return response.data.value || response.data;
+        } catch (error) {
+            console.error('Error searching news with OData:', error);
+            return [];
+        }
+    }
+
+    async getNewsWithFilters(filters: {
+        categoryId?: number;
+        searchTerm?: string;
+        featured?: boolean;
+        orderBy?: string;
+        page?: number;
+        pageSize?: number;
+    }): Promise<NewsDTO[]> {
+        try {
+            const filterParts: string[] = ['Status eq 1'];
+            
+            if (filters.categoryId) {
+                filterParts.push(`CategoryId eq ${filters.categoryId}`);
+            }
+            
+            if (filters.searchTerm) {
+                filterParts.push(`(contains(Title,'${filters.searchTerm}') or contains(Content,'${filters.searchTerm}'))`);
+            }
+            
+            if (filters.featured !== undefined) {
+                filterParts.push(`IsFeatured eq ${filters.featured}`);
+            }
+            
+            const odataParams: ODataQueryParams = {
+                filter: filterParts.join(' and '),
+                orderby: filters.orderBy || 'CreatedDate desc',
+                top: filters.pageSize || 10,
+                skip: filters.page ? (filters.page - 1) * (filters.pageSize || 10) : 0
+            };
+            
+            const query = this.buildODataQuery(odataParams);
+            const response = await api.get(`/news${query}`);
+            return response.data.value || response.data;
+        } catch (error) {
+            console.error('Error fetching news with filters:', error);
+            return [];
+        }
     }
 }
 
